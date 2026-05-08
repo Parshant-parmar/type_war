@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+<title>Type War</title>
+</head>
+
+<body>
+
+<h1 id="title">
+TYPE WAR
+</h1>
+
+<div id="intro">
+
+<p class="tagline">
+Test your typing speed and accuracy
+</p>
+
+<a href="Classic.html" class="play-btn">
+<i class="fa-solid fa-play"></i>
+Play
+</a>
+
+<a href="Classic.html?online=1" class="play-btn">
+<i class="fa-solid fa-users"></i>
+Online
+</a>
+
+</div>
+
+<script>
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const title = document.querySelector("#title");
+const originalText = title.innerText;
+let iteration = 0;
+
+function shuffleTitle(){
+
+let interval = setInterval(()=>{
+
+title.innerText = originalText
+.split("")
+.map((letter,index)=>{
+
+if(index < iteration){
+return originalText[index];
+}
+
+return letters[Math.floor(Math.random()*26)];
+
+})
+.join("");
+
+iteration += 0.22;
+
+if(iteration >= originalText.length){
+clearInterval(interval);
+}
+
+},45);
+
+}
+
+shuffleTitle();
+
+gsap.from("#title",{
+y:-40,
+opacity:0,
+duration:1,
+ease:"power3.out"
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,861 @@
+/* ============================================================
+   TYPE WAR — Upgraded CSS
+   Theme: Dark Arcade Terminal · Neon Pulse · Competitive Edge
+   ============================================================ */
+
+/* ── 0. Google Fonts Import ─────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+
+/* ── 1. Design Tokens ───────────────────────────────────────── */
+:root {
+  /* Core Background */
+  --bg:            #090b0a;
+  --surface:       #111413;
+  --surface-hover: #171a19;
+  --border:        #1e2422;
+  --border-hover:  #2d3532;
+
+  /* Text */
+  --text-primary:    #e8ede9;
+  --text-secondary:  #6b7a70;
+  --text-muted:      #2e3a33;
+  --text-placeholder: #1e2922;
+
+  /* Accent — neon phosphor green */
+  --accent:         #00e87a;
+  --accent-hover:   #00c462;
+  --accent-light:   rgba(0,232,122,.08);
+  --accent-glow:    rgba(0,232,122,.28);
+  --accent-glow-lg: rgba(0,232,122,.12);
+
+  /* State colors */
+  --pink:   #ff3d7f;
+  --green:  #00e87a;
+  --red:    #ff3860;
+  --yellow: #ffd000;
+
+  /* Glow shadows */
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.5);
+  --shadow-md:  0 6px 24px rgba(0,0,0,.6), 0 2px 8px rgba(0,0,0,.4);
+  --shadow-lg:  0 24px 64px rgba(0,0,0,.8), 0 8px 24px rgba(0,0,0,.5);
+  --glow-accent: 0 0 20px var(--accent-glow), 0 0 60px rgba(0,232,122,.08);
+  --glow-red:    0 0 16px rgba(255,56,96,.4);
+  --glow-yellow: 0 0 12px rgba(255,208,0,.5);
+
+  /* Typography */
+  --font-display: "Bebas Neue", "Impact", sans-serif;
+  --font-ui:      "Syne", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", "Fira Code", monospace;
+
+  /* Spacing */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  40px;
+  --space-2xl: 64px;
+
+  /* Radius */
+  --r-sm:  6px;
+  --r-md:  12px;
+  --r-lg:  18px;
+  --r-xl:  24px;
+
+  /* Transitions */
+  --ease: cubic-bezier(.16,.84,.44,1);
+  --t-fast: 100ms;
+  --t-base: 180ms;
+  --t-slow: 320ms;
+}
+
+
+/* ── 2. Reset & Base ────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  font-family: var(--font-ui);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* ── Layered background: grid + scanlines + radial glow ── */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,232,122,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,232,122,.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scanline overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,.08) 3px,
+    rgba(0,0,0,.08) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Radial hero glow at top-center */
+body > *:first-child::before {
+  content: "";
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 600px;
+  background: radial-gradient(ellipse at center, rgba(0,232,122,.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+
+/* ── 3. Typography ──────────────────────────────────────────── */
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(72px, 12vw, 140px);
+  font-weight: 400; /* Bebas Neue is naturally bold */
+  letter-spacing: 6px;
+  text-align: center;
+  /* line-height: 0.92; */
+
+  /* Neon green glow text */
+  color: var(--accent);
+  text-shadow:
+    0 0 20px var(--accent-glow),
+    0 0 60px rgba(0,232,122,.15),
+    0 0 120px rgba(0,232,122,.06);
+
+  animation: titleReveal 0.8s var(--ease) both;
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scaleX(0.96);
+    letter-spacing: 20px;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleX(1);
+    letter-spacing: 6px;
+  }
+}
+
+
+/* ── 4. Layout Helpers ──────────────────────────────────────── */
+#intro {
+  margin-top: clamp(48px, 8vh, 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.6s var(--ease) 0.2s both;
+}
+
+#modes {
+  margin-top: clamp(40px, 7vh, 88px);
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--space-xl);
+  animation: fadeUp 0.6s var(--ease) 0.3s both;
+}
+
+#start {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ── 5. Tagline ─────────────────────────────────────────────── */
+.tagline {
+  color: var(--text-secondary);
+  font-size: clamp(12px, 1.6vw, 15px);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+/* Blinking caret before tagline */
+.tagline::before {
+  content: "▶ ";
+  color: var(--accent);
+  animation: blink 1.2s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+
+/* ── 6. Buttons ─────────────────────────────────────────────── */
+
+/* — Play / CTA button */
+.play-btn {
+  background: transparent;
+  color: var(--accent);
+
+  padding: 14px 36px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+
+  border: 1.5px solid var(--accent);
+  border-radius: var(--r-sm);
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+
+  box-shadow: 0 0 16px var(--accent-glow), inset 0 0 16px rgba(0,232,122,.04);
+  transition:
+    transform var(--t-base) var(--ease),
+    box-shadow var(--t-base) ease,
+    background var(--t-fast) ease,
+    color var(--t-fast) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Sweep fill on hover */
+.play-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.22s var(--ease);
+  z-index: 0;
+}
+
+.play-btn > * { position: relative; z-index: 1; }
+.play-btn span { position: relative; z-index: 1; }
+
+.play-btn:hover {
+  color: var(--bg);
+  transform: translateY(-3px);
+  box-shadow: var(--glow-accent), 0 8px 30px rgba(0,232,122,.2);
+}
+
+.play-btn:hover::before {
+  transform: scaleX(1);
+}
+
+.play-btn:active {
+  transform: translateY(0);
+}
+
+
+/* — Mode cards */
+.mode-btn {
+  background: var(--surface);
+  color: var(--text-secondary);
+
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-family: var(--font-mono);
+
+  padding: var(--space-lg) var(--space-xl);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  border-radius: var(--r-md);
+  cursor: crosshair;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 140px;
+
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--t-base) var(--ease),
+    box-shadow var(--t-base) ease,
+    border-color var(--t-fast) ease,
+    color var(--t-fast) ease,
+    background var(--t-fast) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Corner accents */
+.mode-btn::before,
+.mode-btn::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--accent);
+  border-style: solid;
+  opacity: 0;
+  transition: opacity var(--t-base) ease;
+}
+
+.mode-btn::before {
+  top: 6px; left: 6px;
+  border-width: 1px 0 0 1px;
+}
+
+.mode-btn::after {
+  bottom: 6px; right: 6px;
+  border-width: 0 1px 1px 0;
+}
+
+.mode-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(0,232,122,.04);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md), 0 0 24px rgba(0,232,122,.12);
+}
+
+.mode-btn:hover::before,
+.mode-btn:hover::after {
+  opacity: 1;
+}
+
+.mode-btn:active {
+  transform: translateY(-1px);
+}
+
+
+/* — Start / action button */
+#startbtn {
+  background: var(--accent);
+  color: var(--bg);
+
+  border: none;
+  border-radius: var(--r-sm);
+
+  padding: 10px 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--accent-glow);
+  transition:
+    transform var(--t-base) var(--ease),
+    box-shadow var(--t-base) ease;
+}
+
+#startbtn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-accent);
+}
+
+#startbtn:active {
+  transform: translateY(0);
+}
+
+
+/* — History button */
+#his {
+  padding: 9px 20px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    transform var(--t-base) var(--ease),
+    border-color var(--t-fast) ease,
+    color var(--t-fast) ease;
+}
+
+#his:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+
+/* — Done / modal close button */
+#done {
+  margin-top: var(--space-lg);
+  padding: 12px 32px;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  box-shadow: 0 0 12px var(--accent-glow);
+  transition:
+    transform var(--t-base) var(--ease),
+    background var(--t-fast) ease,
+    color var(--t-fast) ease;
+  position: relative;
+  overflow: hidden;
+}
+
+#done::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s var(--ease);
+  z-index: 0;
+}
+
+#done span { position: relative; z-index: 1; }
+
+#done:hover {
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: var(--glow-accent);
+}
+
+#done:hover::before {
+  transform: scaleX(1);
+}
+
+#done:active {
+  transform: translateY(0);
+}
+
+
+/* ── 7. Slider ──────────────────────────────────────────────── */
+#setnum {
+  -webkit-appearance: none;
+  appearance: none;
+
+  width: 180px;
+  height: 3px;
+
+  background: var(--border);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  transition: background var(--t-fast) ease;
+}
+
+#setnum::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1.5px var(--accent), 0 0 12px var(--accent-glow);
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) ease;
+}
+
+#setnum:hover::-webkit-slider-thumb,
+#setnum:focus::-webkit-slider-thumb {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 2px var(--accent), 0 0 20px var(--accent-glow);
+}
+
+#setnum::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1.5px var(--accent);
+  cursor: pointer;
+}
+
+#storeval {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  width: 32px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 8px var(--accent-glow);
+}
+
+
+/* ── 8. Typing Area ─────────────────────────────────────────── */
+
+#maintext {
+  font-family: var(--font-mono);
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 2;
+  letter-spacing: 0.05em;
+
+  color: var(--text-muted);
+
+  max-width: 760px;
+  margin: var(--space-xl) auto 0;
+  padding: var(--space-xl) clamp(var(--space-lg), 4vw, var(--space-2xl));
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,.03);
+
+  position: relative;
+  z-index: 1;
+  text-align: left;
+  word-break: break-word;
+
+  /* Top accent bar */
+  border-top: 2px solid var(--accent);
+  box-shadow:
+    var(--shadow-md),
+    0 -1px 0 rgba(0,232,122,.3),
+    0 0 40px rgba(0,232,122,.04);
+
+  animation: fadeUp 0.5s var(--ease) 0.1s both;
+}
+
+/* Terminal "window dots" via pseudo-element */
+#maintext::before {
+  content: "●  ●  ●";
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: var(--border-hover);
+  pointer-events: none;
+}
+
+#inputbox {
+  display: none;
+}
+
+/* — Correct character */
+.correct {
+  color: var(--text-primary);
+  opacity: 0.9;
+}
+
+/* — Wrong character */
+.wrong {
+  color: var(--red);
+  text-shadow: var(--glow-red);
+  text-decoration: underline;
+  text-decoration-style: wavy;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--red);
+  animation: shake 80ms ease both;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  33%      { transform: translateX(-2px); }
+  66%      { transform: translateX(2px); }
+}
+
+/* — Current character (cursor) */
+.current {
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 2px;
+  padding: 0 1px;
+  text-shadow: none;
+  box-shadow: var(--glow-yellow);
+  animation: cursorPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes cursorPulse {
+  0%, 100% { box-shadow: 0 0 8px var(--accent-glow); }
+  50%       { box-shadow: 0 0 20px var(--accent-glow), 0 0 40px rgba(0,232,122,.15); }
+}
+
+
+/* ── 9. Progress Bar ────────────────────────────────────────── */
+progress,
+#progressbar {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  margin: var(--space-md) auto 0;
+  height: 2px;
+  border: none;
+  border-radius: 99px;
+  background: var(--border);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+progress::-webkit-progress-bar  { background: var(--border); }
+progress::-webkit-progress-value {
+  background: var(--accent);
+  border-radius: 99px;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+progress::-moz-progress-bar {
+  background: var(--accent);
+  border-radius: 99px;
+}
+
+
+/* ── 10. Popup / Modal ──────────────────────────────────────── */
+#popup {
+  display: none;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.92);
+
+  width: min(480px, 90vw);
+  padding: var(--space-2xl) clamp(var(--space-xl), 6vw, 52px);
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--r-xl);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 60px rgba(0,232,122,.08),
+    0 0 0 1px rgba(0,232,122,.06);
+
+  text-align: center;
+  color: var(--text-primary);
+  z-index: 1001;
+
+  opacity: 0;
+  transition:
+    opacity var(--t-slow) ease,
+    transform var(--t-slow) var(--ease);
+}
+
+#popup.show {
+  display: block;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: popIn var(--t-slow) var(--ease) both;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+#popup p {
+  font-family: var(--font-mono);
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 700;
+  margin: var(--space-md) 0;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 24px var(--accent-glow), 0 0 60px rgba(0,232,122,.12);
+  letter-spacing: -1px;
+}
+
+#popup h2,
+#popup .result-title {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+/* Backdrop — dark blurred overlay (overrides the scanline ::before) */
+body:has(#popup.show)::before {
+  background: rgba(6, 8, 7, 0.88);
+  backdrop-filter: blur(12px) saturate(0.8);
+  -webkit-backdrop-filter: blur(12px) saturate(0.8);
+  opacity: 1;
+  pointer-events: all;
+  /* Keep scanlines gone during modal */
+  background-image: none;
+}
+
+
+/* ── 11. History Panel ──────────────────────────────────────── */
+#History {
+  position: absolute;
+  top: clamp(20px, 4vh, 36px);
+  right: clamp(16px, 4vw, 56px);
+  font-family: var(--font-mono);
+  z-index: 10;
+}
+
+#historyList {
+  list-style: none;
+  margin-top: var(--space-sm);
+  padding: var(--space-md);
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 1.5px solid var(--accent);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md), 0 0 24px rgba(0,232,122,.06);
+
+  max-height: 260px;
+  overflow-y: auto;
+  display: none;
+
+  animation: fadeDown 0.18s var(--ease) both;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#historyList li {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 12px;
+  color: var(--text-secondary);
+  border-radius: var(--r-sm);
+  letter-spacing: 0.05em;
+  transition: background var(--t-fast) ease, color var(--t-fast) ease;
+}
+
+#historyList li:hover {
+  background: rgba(0,232,122,.06);
+  color: var(--accent);
+}
+
+/* Scrollbar */
+#historyList::-webkit-scrollbar { width: 3px; }
+#historyList::-webkit-scrollbar-track { background: transparent; }
+#historyList::-webkit-scrollbar-thumb {
+  background: var(--border-hover);
+  border-radius: 99px;
+}
+
+
+/* ── 12. Responsiveness ─────────────────────────────────────── */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 72px;
+    letter-spacing: 3px;
+  }
+
+  #modes {
+    gap: var(--space-md);
+    padding: 0 var(--space-md);
+  }
+
+  .mode-btn {
+    padding: var(--space-md) var(--space-lg);
+    font-size: 12px;
+    min-width: 110px;
+  }
+
+  #maintext {
+    font-size: 15px;
+    padding: var(--space-xl) var(--space-lg);
+    border-radius: var(--r-md);
+    margin: var(--space-lg) var(--space-md) 0;
+    max-width: 100%;
+  }
+
+  #History {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    padding: var(--space-md) var(--space-md) 0;
+  }
+
+  #start {
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  #popup {
+    padding: var(--space-xl) var(--space-lg);
+  }
+}
+
+@media (max-width: 400px) {
+  .mode-btn {
+    flex: 1 1 calc(50% - var(--space-sm));
+    min-width: 0;
+  }
+}
+
+
+/* ── 13. Reduced Motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
